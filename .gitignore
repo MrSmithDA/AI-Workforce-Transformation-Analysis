@@ -1,0 +1,7 @@
+.ipynb_checkpoints/
+
+ai_workforce_transformation.csv
+cleaned_ai_workforce.csv
+
+__pycache__/
+*.pyc
