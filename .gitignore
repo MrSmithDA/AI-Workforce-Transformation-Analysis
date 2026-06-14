@@ -6,8 +6,6 @@ cleaned_ai_workforce.csv
 __pycache__/
 *.pyc
 
-# Local database exports
-*.sql
 
 # OS files
 .DS_Store
