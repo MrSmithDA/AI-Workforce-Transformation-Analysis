@@ -1,17 +1,24 @@
 # AI Workforce Transformation Analysis
 
-This project explores the relationship between AI adoption, automation, layoffs, employee satisfaction, productivity, and revenue growth using a large simulated workforce dataset.
+This project explores how AI adoption and automation relate to business performance and workforce outcomes using a 1M-row simulated workforce dataset.
 
-I started this project for two reasons:
+I started this project to:
 
-1. To build a more realistic end-to-end analytics project than the typical dashboard tutorials.
-2. To learn PostgreSQL and strengthen my SQL, Python, and data analysis skills while transitioning from IT leadership into data analytics.
+1. To build a realistic end-to-end analytics project beyond tutorial-style dashboards.
+2. To strengthen SQL (PostgreSQL), Python, and analytics skills while transitioning from IT leadership into data analytics.
 
 Rather than focusing only on visualization, I wanted to work through the full analytics workflow: data inspection, cleaning, feature engineering, database loading, SQL analysis, and reporting.
 
+<p align='center'>
+  <img src = 'images/executive_summary.png' width = 200px>
+  <img src = 'images/ai_adoption_analysis.png' width = 200px>
+  <img src = 'images/workforce_impact.png' width = 200px>
+  <img src = 'images/economic_trends.png' width = 200px>
+</p>
+
 ## Business Question
 
-Many organizations are investing heavily in AI and automation, but it is still unclear whether those investments actually improve business outcomes.
+Many organizations are investing heavily in AI and automation, but it is still unclear whether these investments consistently translate into measurable business outcomes.
 
 This project explores questions such as:
 
@@ -49,7 +56,13 @@ Performed initial data quality assessment, reviewed distributions, validated dat
 * Removed data quality issues
 * Filled missing values using industry-level median imputation
 * Validated results after cleaning
+```python
+df['avg_salary'] = df.groupby('industry')['avg_salary'].transform(lambda x: x.fillna(x.median()))
 
+df['revenue_growth'] = df.groupby('industry')['revenue_growth'].transform(lambda x: x.fillna(x.median()))
+
+df['employee_satisfaction'] = df.groupby('industry')['employee_satisfaction'].transform(lambda x: x.fillna(x.median()))
+```
 ### 3. Feature Engineering
 
 Created additional business-focused fields:
@@ -58,6 +71,31 @@ Created additional business-focused fields:
 * Automation Tier
 
 These categories allow comparisons between organizations with different levels of AI maturity.
+```python
+df['ai_adoption_tier'] = pd.cut(
+    df['ai_adoption_score'],
+    bins=[0, 25, 50, 75, 100],
+    labels=[
+        'Minimal',
+        'Emerging',
+        'Established',
+        'Leading'
+    ],
+    include_lowest=True
+)
+
+df['automation_tier'] = pd.cut(
+    df['automation_level'],
+    bins=[0, 25, 50, 75, 100],
+    labels=[
+        'Very Low', 
+        'Low',
+        'Medium',
+        'High'
+    ],
+    include_lowest=True
+)
+```
 
 ### 4. Database Loading
 
@@ -67,12 +105,52 @@ Loaded the cleaned dataset into PostgreSQL using SQLAlchemy and verified success
 
 Used PostgreSQL to investigate relationships between AI adoption, automation, and business performance.
 
-Current findings include:
+Early findings suggest:
 
-* Companies with higher AI adoption demonstrate substantially higher average revenue growth.
-* Higher AI adoption is associated with increased productivity.
-* Automation appears positively correlated with employee satisfaction.
-* Additional analysis is ongoing.
+* Higher AI adoption is consistently associated with higher average revenue growth.
+* Productivity increases steadily with AI adoption level across industries.
+* Automation shows a mild positive relationship with employee satisfaction, though the effect is weaker than revenue and productivity signals.
+* AI adoption appears to improve productivity across all industries at a remarkably consistent rate.
+
+
+```sql
+select
+	industry,
+	round(
+		avg(
+			case
+				when ai_adoption_tier = 'Leading'
+				then productivity_index
+			end
+		)::numeric,2
+	) as leading_productivity,
+	round(
+		avg(
+			case
+				when ai_adoption_tier = 'Minimal'
+				then productivity_index
+			end
+		)::numeric,2
+	) as minimal_productivity,
+	round(
+		avg(
+			case
+				when ai_adoption_tier = 'Leading'
+				then productivity_index
+			end
+		)::numeric
+		-
+		avg(
+			case
+				when ai_adoption_tier = 'Minimal'
+				then productivity_index
+			end
+		)::numeric
+	,2) as productivity_gain
+from ai_workforce_data awd
+group by industry
+order by productivity_gain desc;
+```
 
 ## Repository Structure
 
@@ -92,6 +170,10 @@ reports/
 
 * Final report and project documentation
 
+images/
+
+* Images used in dashboard and report
+
 ## Current Status
 
 Completed:
@@ -101,15 +183,21 @@ Completed:
 * Feature engineering
 * PostgreSQL integration
 * Initial business analysis
+* Dashboard (Executive Summary, AI Adoption Analysis, Workforce Impact, Economic Trends) 
 
 In Progress:
 
-* Advanced SQL analysis
-* Dashboard development
+* Advanced SQL workforce analysis
+* Report
 * Final case study
+
+
+
 
 ## About Me
 
-I'm transitioning from IT leadership and business systems work into data analytics. My background includes IT operations, reporting automation, business systems development, stakeholder support, and process improvement.
+I am transitioning from IT leadership and business systems into data analytics.
 
-This repository documents that transition while showcasing the technical and analytical skills I'm actively building.
+My background includes IT operations, reporting automation, business systems development, and stakeholder-facing analytics.
+
+This project reflects that transition, focusing on SQL, statistical analysis, and end-to-end data storytelling rather than isolated dashboards.
