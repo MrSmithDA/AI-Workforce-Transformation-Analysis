@@ -152,11 +152,33 @@ group by industry
 order by productivity_gain desc;
 ```
 
+## Statistical Analysis
+
+To validate patterns identified during SQL analysis, statistical testing was performed using Python, Pandas, SciPy, and Scikit-learn.
+
+The notebook includes:
+
+- Correlation analysis between AI adoption, automation, productivity, revenue growth, and workforce metrics
+- Hypothesis testing (t-tests) comparing Leading and Minimal AI adoption groups
+- Productivity analysis across AI adoption tiers
+- Linear regression modeling to evaluate the relationship between AI adoption and revenue growth
+
+### Key Findings
+
+- Revenue growth differences between Leading and Minimal AI adopters were statistically significant (**p < 0.001**)
+- Productivity increased consistently across AI adoption tiers
+- AI adoption showed a positive relationship with revenue growth
+- Regression analysis found a statistically significant relationship, although AI adoption alone explained only a portion of overall revenue variation (**R² ≈ 0.046**)
+
+The complete analysis can be found in:
+
+`notebooks/02_statistical_analysis.ipynb`
+
 ## Repository Structure
 
 notebooks/
 
-* Data inspection, cleaning, and ETL notebooks
+* Data inspection, cleaning, statistical analysis, and ETL notebooks
 
 sql/
 
@@ -164,7 +186,7 @@ sql/
 
 dashboard/
 
-* Power BI files and screenshots
+* Power BI files 
 
 reports/
 
@@ -183,11 +205,11 @@ Completed:
 * Feature engineering
 * PostgreSQL integration
 * Initial business analysis
-* Dashboard (Executive Summary, AI Adoption Analysis, Workforce Impact, Economic Trends) 
+* Dashboard (Executive Summary, AI Adoption Analysis, Workforce Impact, Economic Trends)
+* SQL workforce analysis
 
 In Progress:
 
-* Advanced SQL workforce analysis
 * Report
 * Final case study
 
@@ -201,3 +223,4 @@ I am transitioning from IT leadership and business systems into data analytics.
 My background includes IT operations, reporting automation, business systems development, and stakeholder-facing analytics.
 
 This project reflects that transition, focusing on SQL, statistical analysis, and end-to-end data storytelling rather than isolated dashboards.
+
