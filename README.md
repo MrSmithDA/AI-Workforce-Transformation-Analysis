@@ -10,6 +10,10 @@ I started this project to:
 Rather than focusing only on visualization, I wanted to work through the full analytics workflow: data inspection, cleaning, feature engineering, database loading, SQL analysis, and reporting.
 
 <p align='center'>
+	<img src = 'images/hypothesis_testing.png'>
+</p>
+
+<p align='center'>
   <img src = 'images/executive_summary.png' width = 200px>
   <img src = 'images/ai_adoption_analysis.png' width = 200px>
   <img src = 'images/workforce_impact.png' width = 200px>
